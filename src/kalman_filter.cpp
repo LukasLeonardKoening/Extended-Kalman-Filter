@@ -34,14 +34,16 @@ void KalmanFilter::Predict() {
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
+    MatrixXd P_Ht = P_ * H_.transpose();
+    
     // measurement pre-fit residual
     VectorXd y = z - H_ * x_;
     // prefit residual covariance
-    MatrixXd S = H_ * P_ * H_.transpose() + R_;
+    MatrixXd S = H_ * P_Ht + R_;
     // optimal Kalman gain
-    MatrixXd K = P_ * H_.transpose() * S.inverse();
+    MatrixXd K = P_Ht * S.inverse();
     // identity matrix
-    MatrixXd I = MatrixXd::Identity(4, 4);
+    MatrixXd I = MatrixXd::Identity(x_.size(), x_.size());
     
     // update state and state variance
     x_ = x_ + K * y;
