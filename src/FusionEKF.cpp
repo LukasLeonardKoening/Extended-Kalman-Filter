@@ -112,10 +112,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     int noise_ax = 9;
     int noise_ay = 9;
     
-    double q_11 = dt_4/4.0 * noise_ax;
-    double q_13 = dt_3/2.0 * noise_ax;
-    double q_22 = dt_4/4.0 * noise_ay;
-    double q_24 = dt_3/2.0 * noise_ay;
+    double q_11 = dt_4/4 * noise_ax;
+    double q_13 = dt_3/2 * noise_ax;
+    double q_22 = dt_4/4 * noise_ay;
+    double q_24 = dt_3/2 * noise_ay;
     double q_33 = dt_2 * noise_ax;
     double q_44 = dt_2 * noise_ay;
     
