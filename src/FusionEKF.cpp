@@ -46,35 +46,41 @@ FusionEKF::FusionEKF() {
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-  /**
-   * Initialization
-   */
-  if (!is_initialized_) {
     /**
-     * TODO: Initialize the state ekf_.x_ with the first measurement.
-     * TODO: Create the covariance matrix.
-     * You'll need to convert radar from polar to cartesian coordinates.
-     */
+    * Initialization
+    */
+    if (!is_initialized_) {
+        /**
+         * TODO: Initialize the state ekf_.x_ with the first measurement.
+         * TODO: Create the covariance matrix.
+         * You'll need to convert radar from polar to cartesian coordinates.
+         */
 
-    // first measurement
-    cout << "EKF: " << endl;
-    ekf_.x_ = VectorXd(4);
-    ekf_.x_ << 1, 1, 1, 1;
+        // first measurement
+        cout << "EKF: " << endl;
+        ekf_.x_ = VectorXd(4);
+        ekf_.x_ << 1, 1, 1, 1;
+        VectorXd z = measurement_pack.raw_measurements_;
+        if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+          // TODO: Convert radar from polar to cartesian coordinates
+          //         and initialize state.
+            ekf_.x_ << z(0) * cos(z(1)), z(0) * sin(z(1)), z(2) * cos(z(1)), z(2) * sin(z(1));
+        }
+        else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
+            // TODO: Initialize state.
+            ekf_.x_ << measurement_pack.raw_measurements_(0), measurement_pack.raw_measurements_(1), 0, 0;
+        }
+      
+        ekf_.P_ = MatrixXd(4,4);
+        ekf_.P_ <<     1000,0,0,0,
+                      0,1000,0,0,
+                      0,0,1000,0,
+                      0,0,0,1000;
 
-    if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-      // TODO: Convert radar from polar to cartesian coordinates 
-      //         and initialize state.
-
+        // done initializing, no need to predict or update
+        is_initialized_ = true;
+        return;
     }
-    else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
-      // TODO: Initialize state.
-
-    }
-
-    // done initializing, no need to predict or update
-    is_initialized_ = true;
-    return;
-  }
 
   /**
    * Prediction
