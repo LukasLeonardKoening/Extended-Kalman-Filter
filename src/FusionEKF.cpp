@@ -79,10 +79,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         }
       
         ekf_.P_ = MatrixXd(4,4);
-        ekf_.P_ <<     1000,0,0,0,
-                      0,1000,0,0,
-                      0,0,1000,0,
-                      0,0,0,1000;
+        ekf_.P_ <<     1,0,0,0,
+                      0,1,0,0,
+                      0,0,100,0,
+                      0,0,0,100;
 
         // done initializing, no need to predict or update
         is_initialized_ = true;
@@ -100,8 +100,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
    */
     float dt = (measurement_pack.timestamp_ - previous_timestamp_)/1000000.0;
-      std::cout << "timestamp:" << measurement_pack.timestamp_ << std::endl;
-      std::cout << "delta t:" << dt << std::endl;
     previous_timestamp_ = measurement_pack.timestamp_;
       
     ekf_.F_ <<  1, 0, dt, 0,
