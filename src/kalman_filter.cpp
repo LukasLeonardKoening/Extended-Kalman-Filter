@@ -74,6 +74,7 @@ VectorXd CartesianToPolar(const VectorXd &x_state) {
     }
     
     VectorXd h_x = VectorXd(3);
+    h_x << norm_pos, atan, (px*vx + py*vy)/norm_pos;
     return h_x;
     
 }
