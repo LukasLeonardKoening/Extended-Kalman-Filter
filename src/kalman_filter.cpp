@@ -76,16 +76,22 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   
       
     
+}
+
+void KalmanFilter::UpdateEKF(const VectorXd &z) {
+    // Calculation of polar version of current state
+    VectorXd h_x = CartesianToPolar(x_);
+
     // measurement pre-fit residual
     VectorXd y = z - h_x;
     // prefit residual covariance
-    MatrixXd S = H_j * P_ * H_j.transpose() + R_;
+    MatrixXd S = H_ * P_ * H_.transpose() + R_;
     // optimal Kalman gain
-    MatrixXd K = P_ * H_j.transpose() * S.inverse();
+    MatrixXd K = P_ * H_.transpose() * S.inverse();
     // identity matrix
-    MatrixXd I = MatrixXd::Identity(4, 4);
+    MatrixXd I = MatrixXd::Identity(x_.size(), x_.size());
 
     // update state and state variance
     x_ = x_ + K * y;
-    P_ = (I - K*H_j) * P_;
+    P_ = (I - K*H_) * P_;
 }
