@@ -16,16 +16,16 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations, const vector<
         std::cout << "Error calculating RSME: Dimensions of estimation and ground_truth do not fit!" << std::endl;
         return rsme;
     }
-    
+
     // Calculate squared residual
-    for (int i = 0; i < estimations.size(); ++i) {
+    for (unsigned int i = 0; i < estimations.size(); i++) {
         VectorXd residual = estimations[i] - ground_truth[i];
         residual = residual.array() * residual.array();
         rsme += residual;
     }
     
     // Calculate mean
-    rsme = rsme.array() / estimations.size();
+    rsme = rsme / estimations.size();
     
     // Calculate root
     rsme = rsme.array().sqrt();
