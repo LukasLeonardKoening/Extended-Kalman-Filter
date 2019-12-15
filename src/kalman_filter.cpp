@@ -27,6 +27,8 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
+      //std::cout << "F=" << F_ << std::endl;
+      //std::cout << "Q=" << Q_ << std::endl;
     x_ = F_ * x_;
     P_ = F_ * P_ * F_.transpose() + Q_;
 }
@@ -64,6 +66,10 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
             atan,
             x_(0)*x_(2)+x_(1)*x_(3)/norm_pos;
     
+      //double norm = sqrt(pow(h_x(0),2) + pow(h_x(1),2) + pow(h_x(2),2));
+    //h_x = h_x.array()/norm;
+      std::cout << "atan2:" << atan << std::endl;
+  
     // Calculation of Jacobian matrix
     Tools t;
     MatrixXd H_j = t.CalculateJacobian(x_);
