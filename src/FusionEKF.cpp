@@ -145,9 +145,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         // TODO: Radar updates
 
     } else {
-          std::cout << "LiDAR" << std::endl;
+        std::cout << "LiDAR" << std::endl;
         ekf_.R_ = R_laser_;
-          ekf_.H_ = H_laser_;
+        ekf_.H_ = H_laser_;
         ekf_.Update(measurement_pack.raw_measurements_);
         // TODO: Laser updates
 
