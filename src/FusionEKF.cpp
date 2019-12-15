@@ -71,7 +71,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
           // TODO: Convert radar from polar to cartesian coordinates
           //         and initialize state.
-            ekf_.x_ << z(0) * cos(z(1)), z(0) * sin(z(1)), z(2) * cos(z(1)), z(2) * sin(z(1));
+            ekf_.x_ << z(0) * cos(z(1)), z(0) * sin(z(1)), 0, 0;
         }
         else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
             // TODO: Initialize state.
