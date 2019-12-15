@@ -50,11 +50,15 @@ void KalmanFilter::Update(const VectorXd &z) {
     P_ = (I - K*H_) * P_;
 }
 
-void KalmanFilter::UpdateEKF(const VectorXd &z) {
-    // Calculation of polar version of current state
-    VectorXd h_x = VectorXd(3);
-    float norm_pos = sqrt(pow(x_(0),2)+ pow(x_(1),2));
-    float atan = atan2(x_(1), x_(0));
+VectorXd CartesianToPolar(const VectorXd &x_state) {
+    // Calculation of polar version of given state
+    float px = x_state[0];
+    float py = x_state[1];
+    float vx = x_state[2];
+    float vy = x_state[3];
+    
+    float norm_pos = sqrt(pow(px,2) + pow(py,2));
+    float atan = atan2(py, px);
     
     // Normalization of phi
     while (atan > M_PI) {
@@ -63,20 +67,14 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     while (atan < -M_PI) {
         atan += 2*M_PI;
     }
-    // polar version
-    h_x <<  norm_pos,
-            atan,
-            x_(0)*x_(2)+x_(1)*x_(3)/norm_pos;
     
-      //double norm = sqrt(pow(h_x(0),2) + pow(h_x(1),2) + pow(h_x(2),2));
-    //h_x = h_x.array()/norm;
-      std::cout << "atan2:" << atan << std::endl;
-  
-    // Calculation of Jacobian matrix
-    Tools t;
-    MatrixXd H_j = t.CalculateJacobian(x_);
-  
-      
+    // avoid division by zero
+    if (norm_pos < 0.00000001) {
+        norm_pos = 0.00000001;
+    }
+    
+    VectorXd h_x = VectorXd(3);
+    return h_x;
     
 }
 
