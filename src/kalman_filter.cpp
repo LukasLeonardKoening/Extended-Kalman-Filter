@@ -1,10 +1,14 @@
 #include "kalman_filter.h"
+#define PI = 3.124
+#include <iostream>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-/* 
- *   Please note that the Eigen library does not initialize 
+
+
+/*
+ *   Please note that the Eigen library does not initialize
  *   VectorXd or MatrixXd objects with zeros upon creation.
  */
 
@@ -43,7 +47,39 @@ void KalmanFilter::Update(const VectorXd &z) {
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-   * TODO: update the state by using Extended Kalman Filter equations
-   */
+    // Calculation of polar version of current state
+    VectorXd h_x = VectorXd(3);
+    float norm_pos = sqrt(pow(x_(0),2)+ pow(x_(1),2));
+    float atan = atan2(x_(1), x_(0));
+    
+    // Normalization of phi
+    while (atan > M_PI) {
+        atan -= 2*M_PI;
+    }
+    while (atan < -M_PI) {
+        atan += 2*M_PI;
+    }
+    // polar version
+    h_x <<  norm_pos,
+            atan,
+            x_(0)*x_(2)+x_(1)*x_(3)/norm_pos;
+    
+    // Calculation of Jacobian matrix
+    Tools t;
+    MatrixXd H_j = t.CalculateJacobian(x_);
+  
+      
+    
+    // measurement pre-fit residual
+    VectorXd y = z - h_x;
+    // prefit residual covariance
+    MatrixXd S = H_j * P_ * H_j.transpose() + R_;
+    // optimal Kalman gain
+    MatrixXd K = P_ * H_j.transpose() * S.inverse();
+    // identity matrix
+    MatrixXd I = MatrixXd::Identity(4, 4);
+
+    // update state and state variance
+    x_ = x_ + K * y;
+    P_ = (I - K*H_j) * P_;
 }
