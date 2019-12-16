@@ -54,7 +54,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
     jacobian(1,0) = -p_y / pos_norm_sq;
     jacobian(1,1) = p_x / pos_norm_sq;
     jacobian(2,0) = p_y * (v_x*p_y - v_y*p_x) / pos_norm_32;
-    jacobian(2,1) = p_y * (v_y*p_x - v_x*p_y) / pos_norm_32;
+    jacobian(2,1) = p_x * (v_y*p_x - v_x*p_y) / pos_norm_32;
     jacobian(2,2) = p_x / pos_norm;
     jacobian(2,3) = p_y / pos_norm;
   
