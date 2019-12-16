@@ -35,19 +35,19 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations, const vector<
 
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
     MatrixXd jacobian = MatrixXd::Zero(3,4);
-    float p_x = x_state(0);
-    float p_y = x_state(1);
-    float v_x = x_state(2);
-    float v_y = x_state(3);
+    double p_x = x_state(0);
+    double p_y = x_state(1);
+    double v_x = x_state(2);
+    double v_y = x_state(3);
     
     if (p_x == 0 && p_y == 0) {
         std::cout << "Error calculating Jacobian Matrix: Division by zero!" << std::endl;
         return jacobian;
     }
     
-    float pos_norm_sq = pow(p_x,2) + pow(p_y,2);
-    float pos_norm = sqrt(pos_norm_sq);
-    float pos_norm_32 = pow(pos_norm_sq, 3/2);
+    double pos_norm_sq = p_x*p_x + p_y*p_y;
+    double pos_norm = sqrt(pos_norm_sq);
+    double pos_norm_32 = pos_norm_sq * pos_norm;
     
     jacobian(0,0) = p_x / pos_norm;
     jacobian(0,1) = p_y / pos_norm;
@@ -57,6 +57,6 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
     jacobian(2,1) = p_y * (v_y*p_x - v_x*p_y) / pos_norm_32;
     jacobian(2,2) = p_x / pos_norm;
     jacobian(2,3) = p_y / pos_norm;
-    
+  
     return jacobian;
 }

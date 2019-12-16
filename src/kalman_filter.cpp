@@ -52,13 +52,11 @@ void KalmanFilter::Update(const VectorXd &z) {
 
 VectorXd CartesianToPolar(const VectorXd &x_state) {
     // Calculation of polar version of given state
-    float px = x_state[0];
-    float py = x_state[1];
-    float vx = x_state[2];
-    float vy = x_state[3];
+    double px = x_state[0];
+    double py = x_state[1];
+    double vx = x_state[2];
+    double vy = x_state[3];
     
-    float norm_pos = sqrt(pow(px,2) + pow(py,2));
-    float atan = atan2(py, px);
     
     // Normalization of phi
     while (atan > M_PI) {
@@ -67,6 +65,8 @@ VectorXd CartesianToPolar(const VectorXd &x_state) {
     while (atan < -M_PI) {
         atan += 2*M_PI;
     }
+    double norm_pos = sqrt(px*px + py*py);
+    double atan = atan2(py, px);
     
     // avoid division by zero
     if (norm_pos < 0.00000001) {
