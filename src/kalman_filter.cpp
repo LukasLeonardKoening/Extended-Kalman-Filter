@@ -57,14 +57,6 @@ VectorXd CartesianToPolar(const VectorXd &x_state) {
     double vx = x_state[2];
     double vy = x_state[3];
     
-    
-    // Normalization of phi
-    while (atan > M_PI) {
-        atan -= 2*M_PI;
-    }
-    while (atan < -M_PI) {
-        atan += 2*M_PI;
-    }
     double norm_pos = sqrt(px*px + py*py);
     double atan = atan2(py, px);
     
@@ -83,8 +75,15 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     // Calculation of polar version of current state
     VectorXd h_x = CartesianToPolar(x_);
 
-    // measurement pre-fit residual
+    // measurement pre-fit residual and normalization of phi
     VectorXd y = z - h_x;
+      while (y(1) > M_PI) {
+        y(1) -= 2*M_PI;
+    }
+    while (y(1) < -M_PI) {
+        y(1) += 2*M_PI;
+    }
+    
     // prefit residual covariance
     MatrixXd S = H_ * P_ * H_.transpose() + R_;
     // optimal Kalman gain
