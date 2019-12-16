@@ -106,9 +106,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
                 0, 1, 0, dt,
                 0, 0, 1, 0,
                 0, 0, 0, 1;
-    double dt_4 = pow(dt, 4.0);
-    double dt_3 = pow(dt, 3.0);
-    double dt_2 = pow(dt, 2.0);
+      double dt_2 = dt * dt;
+      double dt_3 = dt_2 * dt;
+    double dt_4 = dt_3 * dt;
     int noise_ax = 9;
     int noise_ay = 9;
     
