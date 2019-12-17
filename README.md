@@ -55,7 +55,7 @@ The final root-mean-square errors are for position X: 0.0978, position Y: 0.0854
 
 The general processing flow is displayed in the following diagram from Udacity's lesson:
 
-![](/Users/llkoening/Documents/Coding/C++/Extended-Kalman-Filter/images/processing flow.png)
+![](images/processing flow.png)
 
 The Extended Kalman Filter matrices are initialized in `FusionEKF.cpp`. The function `ProcessMeasurement(const MeasurementPackage &measurement_pack)` implements the algorithm. 
 
